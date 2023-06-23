@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const express = require("express");
-const { Project, generateJoinCode } = require("../models/project");
+const { Project, Member, generateJoinCode } = require("../models/project");
 const router = express.Router();
 
 // Get specified project
@@ -25,6 +25,23 @@ router.post("/", async (req, res) => {
     project = await project.save();
     res.send(project);
 });
+
+// Post a new project member
+router.post("/:id/members", async (req, res) => {
+    let project = await Project.findById(req.params.id);
+    if (!project)
+        return res.status(404).send("The project with the given ID was not found.");
+
+    let newMember = new Member({
+        user: req.body.userId,
+        project: req.params.id,
+    });
+    newMember = await newMember.save();
+
+    project.members.push(newMember);
+    project = await project.save();
+    res.send(project);
+})
 
 // Put specified project
 router.put("/:id", async (req, res) => {
