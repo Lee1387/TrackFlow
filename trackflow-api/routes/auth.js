@@ -6,6 +6,11 @@ const express = require("express");
 const { User } = require("../models/user");
 const router = express.Router();
 
+// Get login test
+router.get("/", authenticateToken, (req, res) => {
+    res.send(req, user);
+})
+
 // Post login request
 router.post("/", async (req, res) => {
     const { error } = validate(req.body);
@@ -30,7 +35,7 @@ function validate(req) {
     return schema.validate(req);
 }
 
-function authenticeAtoken(req, res, next) {
+function authenticateToken(req, res, next) {
     const authHeader = req.headers["authorisation"];
     const token = authHeader && authHeader.split(" ")[1];
     if (!token) return res.status(401).send("Access denied. No token provided.");
