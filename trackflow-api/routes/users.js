@@ -35,11 +35,7 @@ router.put("/:id", async (req, res) => {
     const { error } = validateUser(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const user = await User.findByIdAndUpdate(
-        req.params.id,
-        { name: req.body.name },
-        { new: true }
-    );
+    const user = await User.findByIdAndUpdate(req.params.id, { name: req.body.name }, { new: true });
     if (!user) return res.status(404).send("The user with the given ID was not found.");
 
     res.send(user);

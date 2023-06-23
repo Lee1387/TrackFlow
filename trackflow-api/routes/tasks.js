@@ -66,8 +66,7 @@ router.delete("/:id", async (req, res) => {
     if (!task) return res.status(404).send("The task with the given ID was not found.");
 
     const project = await Project.findById(task.project);
-    if (!task)
-        return res.status(404).send("The project with the given ID was not found.");
+    if (!task) return res.status(404).send('The project with the given ID was not found.');
 
     project.taskCounter = project.taskCounter - 1;
     project.tasks.pull(task._id);
@@ -81,8 +80,7 @@ router.put("/:id/tackler", async (req, res) => {
     if (!task) return res.status(404).send("The task with the given ID was not found.");
 
     const member = await Member.findById(req.body.memberId);
-    if (!member)
-        return res.status(404).send("The member with the given ID was not found.");
+    if (!member) return res.status(404).send('The member with the given ID was not found.');
 
     task.taskTackler = member._id;
     await task.save();
