@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const express = require("express");
 const { Task } = require("../models/task");
 const { Project } = require("../models/project");
+const { Member } = require("../models/member");
 const router = express.Router();
 
 // Get specified task
@@ -67,5 +68,20 @@ router.delete("/:id", async (req, res) => {
     await project.save();
     res.send(task);
 });
+
+// Put task tackler
+router.put("/:id/tackler", async (req, res) => {
+    const task = await Task.findById(req.params.id);
+    if (!task) return res.status(404).send("The task with the given ID was not found.");
+
+    const member = await Member.findById(req.body.memberId);
+    if (!member)
+        return res.status(404).send("The member with the given ID was not found.");
+
+    task.taskTackler = member._id;
+    await task.save();
+
+    res.send(task);
+})
 
 module.exports = router;
