@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
 });
 
 // Put specified user
-router.put("./:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
     const user = await User.findByIdAndUpdate(
         req.params.id,
         { name: req.body.name },
@@ -40,5 +40,11 @@ router.put("./:id", async (req, res) => {
 });
 
 // Delete specified user
+router.delete("/:id", async (req, res) => {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) return res.status(404).send("The user with the given ID was not found.");
+
+    res.send(user);
+})
 
 module.exports = router;
