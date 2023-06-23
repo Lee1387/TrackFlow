@@ -6,8 +6,14 @@ const taskSchema = new mongoose.Schema({
 		required: true,
 	},
     summary: String,
-    status: String,
-    priority: String,
+	status: {
+		type: String,
+		default: "TO-DO",
+	},
+	priority: {
+		type: String,
+		default: "None",
+	},
 	taskNumber: {
 		type: Number,
 		required: true,
@@ -22,11 +28,17 @@ const taskSchema = new mongoose.Schema({
 	},
 	dateModified: {
 		type: Date,
-		required: true,
+		default: Date.now,
 	},
 	taskTackler: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User',
+		default: null,
+	},
+	project: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "Project",
+		required: true,
 	},
 });
 
