@@ -53,12 +53,19 @@ router.put("/:id", async (req, res) => {
     res.send(task);
 });
 
-// Delete specified tasks
+// Delete specified task
 router.delete("/:id", async (req, res) => {
-    const tasks = await Task.findByIdAndUpdate(req.params.id);
-    if (!tasks) return res.status(404).send("The tasks with the given ID was not found.");
+    const task = await Task.findByIdAndUpdate(req.params.id);
+    if (!task) return res.status(404).send("The task with the given ID was not found.");
 
-    res.send(tasks);
+    const project = await Project.findById(task.project);
+    if (!task)
+        return res.status(404).send("The project with the given ID was not found.");
+
+    project.taskCounter = project.taskCounter - 1;
+    project.tasks.pull(task._id);
+    await project.save();
+    res.send(task);
 });
 
 module.exports = router;
