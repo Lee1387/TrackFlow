@@ -34,6 +34,10 @@ const projectSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    taskCounter: {
+        type: Number,
+        default: 0,
+    },
     members: [memberSchema],
     tasks: [
         {
