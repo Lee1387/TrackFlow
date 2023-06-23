@@ -1,16 +1,10 @@
-const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const express = require("express");
 const { User } = require("../models/user");
-const authenticateToken = require("../middleware/auth");
+const auth = require("../middleware/auth");
 const router = express.Router();
-
-// Get login test
-router.get("/", authenticateToken, (req, res) => {
-    res.send(req, user);
-});
 
 // Post login request
 router.post("/", async (req, res) => {
