@@ -31,7 +31,19 @@ const Login = () => {
                     <LoginForm />
                     <Typography variant="body1" color="typography.main">
                         {"Don't have an account? "}
-                        <Link to="/register">{"Sign Up"}</Link>
+                        <Typography
+                            component={Link}
+                            to="/register"
+                            sx={{
+                                textDecoration: "none",
+                                color: "secondary.main",
+                                "&:visited": {
+                                    color: "secondary.main",
+                                },
+                            }}
+                        >
+                            Sign Up
+                        </Typography>
                     </Typography>
             </Grid>
             <Grid
