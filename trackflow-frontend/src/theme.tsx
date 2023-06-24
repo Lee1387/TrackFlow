@@ -1,6 +1,5 @@
 import { createTheme } from "@mui/material";
 
-
 const theme = createTheme({
     priority: {
       high: "#AFEB7F",
@@ -62,5 +61,6 @@ declare module "@mui/material/styles" {
       };
     }
 }
+
 
 export default theme;
