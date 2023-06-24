@@ -1,71 +1,46 @@
-import { Box, Button, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import PlayIcon from "@mui/icons-material/PlayCircle";
-import ProjectBox from "./ProjectBox";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import refreshAccessToken from "../../util/refreshToken";
-import { useNavigate } from "react-router-dom";
+
+import ProjectList from "./ProjectList";
+import apiClient from "../../services/apiClient";
 
 interface User {
     _id: string;
     name: string;
-    email: string;
     projects: string[];
 }
 
+interface FetchUserResponse {
+    user: User;
+}
+
 const Projects = () => {
-	// const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [user, setUser] = useState<User | null>(null);
-    const navigate = useNavigate();
+    const [error, setError] = useState("");
 
     useEffect(() => {
-        const accessToken = localStorage.getItem("access_token");
-        if (!accessToken) {
-            navigate("/login");
-            return;
-        }
+        const accessToken = localStorage.getItem('access_token');
 
-        const fetchData = async () => {
-            try {
-                const { data } = await axios.get("http://localhost:3000/api/users/me", {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },  
-                });
-                setUser(data.user);
-            } catch (error) {
-                if (axios.isAxiosError(error) && error.response?.status === 401) {
-                    console.log("expired token probably");
-                    const refreshToken = localStorage.getItem("refresh_token");
-                    if (!refreshToken) {
-                        console.error("Refresh token is null");
-                        return;
-                    }
-                    const newAccessToken = await refreshAccessToken(refreshToken);
-                    if (!newAccessToken) {
-                        console.error("Could not refresh access token");
-                        return;
-                    }
-                    const { data } = await axios.get("/api/user/me", {
-                        headers: {
-                            Authorization: `Bearer ${newAccessToken}`,
-                        },
-                    });
-                    setUser(data.user);
-                } else {
-                    console.error(error);
-                }
-            }
-        };
-        
-        fetchData();
-    }, [navigate]);
+        apiClient
+            .get<FetchUserResponse>("/users/me", {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            })
+            .then((res) => setUser(res.data.user))
+            .catch((err) => setError(err.message));
+        }, []);
+
+        const welcomeMessage = user ? (
+            <Typography variant="h4" color="typography.main">
+                Welcome, {user.name}!
+            </Typography>
+        ) : null;
+        const projectsList = user ? <ProjectList projectIds={user.projects}></ProjectList> : null;
 
     return (
         <>
-            {/* <Grid item xs={12} bgcolor={"primary.dark"} height={"50px"}}>
-                    <SideBar isDrawerOpen={isDrawerOpen} setIsDrawerOpen={setIsDrawerOpen} />
-                </Grid> */}
                 <Grid container height="100vh" width="100%" bgcolor="bg.dark">
                     {/* project selection */}
                     <Grid 
@@ -87,22 +62,16 @@ const Projects = () => {
                             sx={{ boxSizing: "border-box", display: { xs: "none", md: "block" } }}
                         >
                             <Box height="100%" width="100%" p={2} borderRadius="15px" bgcolor="secondary.main">
-                                {user && (
-                                    <Typography variant="h4" color="typography.main">
-                                        Welcome, {user.name}!
-                                    </Typography>
-                                )}
+                                {welcomeMessage}
                             </Box>
                         </Grid>
                         {/* new and join project forms*/}
                         <Grid container item xs={12} height={{ xs: "55%", md: "30%" }}>
-                            {/* new project*/}
                             <Grid item xs={12} md={5} bgcolor="bg.dark">
                                 <Typography variant="h4" color="typography.main">
                                     Create a new project
                                 </Typography>
                             </Grid>
-                            {/* join project */}
                             <Grid item xs={12} md={5} bgcolor="bg.dark">
                                 <Typography variant="h4" color="typography.main">
                                     Join an existing project
@@ -114,9 +83,7 @@ const Projects = () => {
                             <Typography variant="h4" color="typography.main">
                                 Your projects list
                             </Typography>
-                            <Stack direction="row" spacing={5} mt={2} sx={{ overflowY: "hidden" }}>
-                                <ProjectBox></ProjectBox>
-                            </Stack>
+                            {projectsList}
                         </Grid>
                     </Grid>
                     {/* selected project */}
@@ -134,7 +101,7 @@ const Projects = () => {
                             Current selection
                         </Typography>
                         <Box my={3} display="flex" justifyContent="center">
-                            <ProjectBox></ProjectBox>
+                            {/* <ProjectBox></ProjectBox> */}
                         </Box>
                         <Box display={{ xs: "none", md: "block" }}>
                             <Typography variant="h4" color="typography.main">

@@ -15,11 +15,11 @@ router.get("/:id", async (req, res) => {
 
 // Get projects by id in the provided list of project ids
 router.get("/", async (req, res) => {
-    const projectIds = req.body.projectIds;
+    const projectIds = req.query.projectIds;
     const projects = await Project.find({
         _id: { $in: projectIds },
     });
-    res.send(projects);
+    res.send({ projects });
 });
 
 // Post new project
