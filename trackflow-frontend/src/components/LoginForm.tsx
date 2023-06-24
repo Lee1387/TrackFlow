@@ -70,7 +70,7 @@ const LoginForm = () => {
         <Typography variant="body1">
             Don't have an account?
             <Box component="span" color="purple">
-                {" Sign Up "}
+                {" Sign Up"}
             </Box>
         </Typography>
     </>
