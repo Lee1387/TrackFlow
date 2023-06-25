@@ -12,8 +12,8 @@ interface Props {
 
 const UserBanner = ({ user }: Props) => {
     const welcomeMessage = user ? (
-        <Typography variant="h4" color="typography.main">
-            Welcome, {user.name}!
+        <Typography display="flex" justifyContent="center" alignItems="center" height="100%" variant="h3" fontWeight="bold" color="typography.main">
+            Welcome Back {user.name}!       
         </Typography>
     ) : null;
 
