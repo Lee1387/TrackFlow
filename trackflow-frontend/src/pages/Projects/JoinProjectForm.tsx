@@ -60,25 +60,23 @@ const JoinProjectForm = ({ userId } : Props) => {
     };
 
     return (
-        <Box mt={2} pr={2} width="50%">
-            <form onSubmit={handleSubmit}>
-                <Stack direction="column" spacing={2}>
-                    <TextField 
-                        value={joinCode}
-                        onChange={(e) => setJoinCode(e.target.value)}
-                        label="Join Code"
-                        placeholder="XXXX-XXXX"
-                        variant="outlined"
-                        color="secondary"
-                        size="medium"
-                        required 
-                    />
-                    <Button variant="contained" type="submit" color="secondary" size="medium">
-                        Join
-                    </Button>
-                </Stack>
-            </form>
-        </Box>
+        <form onSubmit={handleSubmit}>
+            <Stack direction="column" spacing={2}>
+                <TextField 
+                    value={joinCode}
+                    onChange={(e) => setJoinCode(e.target.value)}
+                    label="Join Code"
+                    placeholder="XXXX-XXXX"
+                    variant="outlined"
+                    color="secondary"
+                    size="medium"
+                    required 
+                />
+                <Button variant="contained" type="submit" color="secondary" size="medium">
+                    Join
+                </Button>
+            </Stack>
+        </form>
     );
 };
 
