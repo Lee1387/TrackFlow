@@ -60,7 +60,7 @@ const NewTaskForm = ({ projectId }: Props) => {
                             .then(() => refreshPage())
                             .catch((err) => setErrorMessage(err.response.data));
                     } else {
-                        navigate("/projects");
+                        navigate("/login");
                     }
                 } else {
                     setErrorMessage(err.response.data);
